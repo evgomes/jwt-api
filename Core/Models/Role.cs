@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 
-namespace JWTAPI.Models
+namespace JWTAPI.Core.Models
 {
     public class Role
     {

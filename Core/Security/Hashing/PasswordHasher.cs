@@ -3,7 +3,7 @@ using System.Runtime.CompilerServices;
 using System.Security.Cryptography;
 using System.Text;
 
-namespace JWTAPI.Models.Security
+namespace JWTAPI.Core.Security.Hashing
 {
     /// <summary>
     /// This password hasher is the same used by ASP.NET Identity.
@@ -31,10 +31,10 @@ namespace JWTAPI.Models.Security
             return Convert.ToBase64String(dst);
         }
 
-        public bool PasswordMatches(string providedPassword, string hashedPassword)
+        public bool PasswordMatches(string providedPassword, string passwordHash)
         {
             byte[] buffer4;
-            if (hashedPassword == null)
+            if (passwordHash == null)
             {
                 return false;
             }
@@ -42,7 +42,7 @@ namespace JWTAPI.Models.Security
             {
                 throw new ArgumentNullException("providedPassword");
             }
-            byte[] src = Convert.FromBase64String(hashedPassword);
+            byte[] src = Convert.FromBase64String(passwordHash);
             if ((src.Length != 0x31) || (src[0] != 0))
             {
                 return false;

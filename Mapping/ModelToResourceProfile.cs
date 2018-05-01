@@ -1,7 +1,8 @@
 using System.Linq;
 using AutoMapper;
 using JWTAPI.Controllers.Resources;
-using JWTAPI.Models;
+using JWTAPI.Core.Models;
+using JWTAPI.Core.Security.Tokens;
 
 namespace JWTAPI.Mapping
 {
@@ -11,6 +12,11 @@ namespace JWTAPI.Mapping
         {
             CreateMap<User, UserResource>()
                 .ForMember(u => u.Roles, opt => opt.MapFrom(u => u.UserRoles.Select(ur => ur.Role.Name)));
+
+            CreateMap<AccessToken, AccessTokenResource>()
+                .ForMember(a => a.AccessToken, opt => opt.MapFrom(a => a.Token))
+                .ForMember(a => a.RefreshToken, opt => opt.MapFrom(a => a.RefreshToken.Token))
+                .ForMember(a => a.Expiration, opt => opt.MapFrom(a => a.Expiration));
         }
     }
 }

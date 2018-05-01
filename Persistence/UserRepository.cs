@@ -1,8 +1,7 @@
 using System.Linq;
 using System.Threading.Tasks;
-using JWTAPI.Models;
-using JWTAPI.Models.Repositories;
-using JWTAPI.Models.Security;
+using JWTAPI.Core.Models;
+using JWTAPI.Core.Repositories;
 using Microsoft.EntityFrameworkCore;
 
 namespace JWTAPI.Persistence
@@ -22,8 +21,10 @@ namespace JWTAPI.Persistence
                                             .ToListAsync();
 
             foreach(var role in roles)
+            {
                 user.UserRoles.Add(new UserRole { RoleId = role.Id });
-                
+            }
+               
             _context.Users.Add(user);
         }
 

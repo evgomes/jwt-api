@@ -1,4 +1,4 @@
-﻿using JWTAPI.Models.Security;
+﻿using JWTAPI.Core.Security.Hashing;
 using JWTAPI.Persistence;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
@@ -19,13 +19,13 @@ namespace JWTAPI
                 var passwordHasher = services.GetService<IPasswordHasher>();
                 DatabaseSeed.Seed(context, passwordHasher);
             }
-            
+
             host.Run();
         }
 
         public static IWebHost BuildWebHost(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
-            .UseStartup<Startup>()
-            .Build();
+                   .UseStartup<Startup>()
+                   .Build();
     }
 }

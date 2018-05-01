@@ -1,4 +1,4 @@
-namespace JWTAPI.Models
+namespace JWTAPI.Core.Models
 {
     public enum ERole
     {

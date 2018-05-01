@@ -1,6 +1,6 @@
 using AutoMapper;
 using JWTAPI.Controllers.Resources;
-using JWTAPI.Models;
+using JWTAPI.Core.Models;
 
 namespace JWTAPI.Mapping
 {

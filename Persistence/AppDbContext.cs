@@ -1,5 +1,5 @@
 using JetBrains.Annotations;
-using JWTAPI.Models;
+using JWTAPI.Core.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace JWTAPI.Persistence

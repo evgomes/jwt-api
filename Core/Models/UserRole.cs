@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace JWTAPI.Models
+namespace JWTAPI.Core.Models
 {
     [Table("UserRoles")]
     public class UserRole

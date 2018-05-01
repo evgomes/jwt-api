@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
-using JWTAPI.Models;
-using JWTAPI.Models.Security;
+using JWTAPI.Core.Models;
+using JWTAPI.Core.Security.Hashing;
 
 namespace JWTAPI.Persistence
 {

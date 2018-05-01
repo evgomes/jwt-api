@@ -1,6 +1,7 @@
 using System.Threading.Tasks;
+using JWTAPI.Core.Models;
 
-namespace JWTAPI.Models.Repositories
+namespace JWTAPI.Core.Repositories
 {
     public interface IUserRepository
     {

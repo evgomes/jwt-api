@@ -1,9 +1,8 @@
 ﻿using System;
-using System.Text;
 using AutoMapper;
-using JWTAPI.Models;
-using JWTAPI.Models.Repositories;
-using JWTAPI.Models.Security;
+using JWTAPI.Core.Repositories;
+using JWTAPI.Core.Security.Hashing;
+using JWTAPI.Core.Security.Tokens;
 using JWTAPI.Persistence;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -33,7 +32,9 @@ namespace JWTAPI
 
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
-            services.AddScoped<IPasswordHasher, PasswordHasher>();
+            
+            services.AddSingleton<IPasswordHasher, PasswordHasher>();
+            services.AddSingleton<ITokenHandler, TokenHandler>();
 
             services.Configure<TokenOptions>(Configuration.GetSection("TokenOptions"));
             var tokenOptions = Configuration.GetSection("TokenOptions").Get<TokenOptions>();

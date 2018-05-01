@@ -1,7 +1,7 @@
 using System.Security.Cryptography;
 using Microsoft.IdentityModel.Tokens;
 
-namespace JWTAPI.Models.Security
+namespace JWTAPI.Core.Security.Tokens
 {
     public class SigningConfigurations
     {

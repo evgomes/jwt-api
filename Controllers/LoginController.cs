@@ -1,15 +1,10 @@
-using System;
-using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
 using System.Threading.Tasks;
 using AutoMapper;
 using JWTAPI.Controllers.Resources;
-using JWTAPI.Models;
-using JWTAPI.Models.Repositories;
-using JWTAPI.Models.Security;
+using JWTAPI.Core.Repositories;
+using JWTAPI.Core.Security.Hashing;
+using JWTAPI.Core.Security.Tokens;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Options;
 
 namespace JWTAPI.Controllers
 {
@@ -17,22 +12,15 @@ namespace JWTAPI.Controllers
     {
         private readonly IUserRepository _userRepository;
         private readonly IMapper _mapper;
-        private readonly TokenOptions _tokenOptions;
-        private readonly SigningConfigurations _signingConfigurations;
         private readonly IPasswordHasher _passwordHasher;
+        private readonly ITokenHandler _tokenHandler;
 
-        public AuthController(
-            IUserRepository userRepository,
-            IMapper mapper,
-            SigningConfigurations signingConfigurations,
-            IOptionsSnapshot<TokenOptions> tokenOptionsSnapshot,
-            IPasswordHasher passwordHasher)
+        public AuthController(IUserRepository userRepository, IMapper mapper, IPasswordHasher passwordHasher, ITokenHandler tokenHandler)
         {
             _mapper = mapper;
             _userRepository = userRepository;
-            _tokenOptions = tokenOptionsSnapshot.Value;
-            _signingConfigurations = signingConfigurations;
             _passwordHasher = passwordHasher;
+            _tokenHandler = tokenHandler;
         }
 
         [Route("/api/login")]
@@ -56,35 +44,58 @@ namespace JWTAPI.Controllers
                 return BadRequest();
             }
 
-            var handler = new JwtSecurityTokenHandler();
-            var securityToken = new JwtSecurityToken(
-                issuer : _tokenOptions.Issuer,
-                audience : _tokenOptions.Audience,
-                claims : GetUserClaims(user),
-                expires : DateTime.UtcNow.AddSeconds(_tokenOptions.Expiration),
-                notBefore : DateTime.UtcNow,
-                signingCredentials : _signingConfigurations.SigningCredentials
-            );
-            var token = handler.WriteToken(securityToken);
+            var token = _tokenHandler.CreateAccessToken(user);
+            var accessTokenResource = _mapper.Map<AccessToken, AccessTokenResource>(token);
 
-            var response = new { token = token };
-            return Ok(response);
+            return Ok(accessTokenResource);
         }
 
-        private IEnumerable<Claim> GetUserClaims(User user)
+        [Route("/api/token/refresh")]
+        [HttpPost]
+        public async Task<IActionResult> RefreshTokenAsync([FromBody] RefreshTokenResource refreshTokenResource)
         {
-            var claims = new List<Claim>
+            if (!ModelState.IsValid)
             {
-                new Claim(JwtRegisteredClaimNames.Sub, user.Email),
-                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
-            };
-
-            foreach(var userRole in user.UserRoles)
-            {
-                claims.Add(new Claim(ClaimTypes.Role, userRole.Role.Name));
+                return BadRequest(ModelState);
             }
 
-            return claims;
+            var refreshToken = _tokenHandler.TakeRefreshToken(refreshTokenResource.Token);
+
+            if(refreshToken == null)
+            {
+                return BadRequest("Invalid refresh token.");
+            }
+
+            if (refreshToken.IsExpired())
+            {
+                return BadRequest("Expired refresh token.");
+            }
+
+            var user = await _userRepository.FindAsync(refreshTokenResource.UserEmail);
+            if(user == null)
+            {
+                _tokenHandler.RevokeRefreshToken(refreshToken.Token);
+                return BadRequest("Invalid refresh token.");
+            }
+
+            var token = _tokenHandler.CreateAccessToken(user);
+            var tokenResource = _mapper.Map<AccessToken, AccessTokenResource>(token);
+
+            return Ok(tokenResource);
+        }
+
+        [Route("/api/token/revoke")]
+        [HttpPost]
+        public IActionResult RevokeToken([FromBody] RevokeTokenResource revokeTokenResource)
+        {
+            if(!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            _tokenHandler.RevokeRefreshToken(revokeTokenResource.Token);
+
+            return NoContent();
         }
     }
 }

@@ -1,5 +1,5 @@
 using System.Threading.Tasks;
-using JWTAPI.Models.Repositories;
+using JWTAPI.Core.Repositories;
 
 namespace JWTAPI.Persistence
 {

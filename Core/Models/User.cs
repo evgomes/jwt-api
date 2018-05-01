@@ -3,7 +3,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Identity;
 
-namespace JWTAPI.Models
+namespace JWTAPI.Core.Models
 {
     public class User
     {
