@@ -6,6 +6,6 @@ namespace JWTAPI.Core.Repositories
     public interface IUserRepository
     {
         Task AddAsync(User user, ERole[] userRoles);
-        Task<User> FindAsync(string email);
+        Task<User> FindByEmailAsync(string email);
     }
 }

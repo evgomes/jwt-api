@@ -4,6 +4,7 @@ using JWTAPI.Controllers.Resources;
 using JWTAPI.Core.Models;
 using JWTAPI.Core.Repositories;
 using JWTAPI.Core.Security.Hashing;
+using JWTAPI.Core.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace JWTAPI.Controllers
@@ -11,17 +12,13 @@ namespace JWTAPI.Controllers
     [Route("/api/[controller]")]
     public class UsersController : Controller
     {
-        private readonly IUserRepository _userRepository;
-        private readonly IUnitOfWork _unitOrWork;
         private readonly IMapper _mapper;
-        private readonly IPasswordHasher _passwordHasher;
+        private readonly IUserService _userService;
 
-        public UsersController(IUserRepository userRepository, IUnitOfWork unitOrWork, IMapper mapper, IPasswordHasher passwordHasher)
+        public UsersController(IUserService userService, IMapper mapper)
         {
-            _passwordHasher = passwordHasher;
+            _userService = userService;
             _mapper = mapper;
-            _unitOrWork = unitOrWork;
-            _userRepository = userRepository;
         }
 
         [HttpPost]
@@ -31,14 +28,16 @@ namespace JWTAPI.Controllers
             {
                 return BadRequest(ModelState);
             }
-            
+
             var user = _mapper.Map<UserCredentialsResource, User>(userCredentials);
-            user.Password = _passwordHasher.HashPassword(user.Password);
+            
+            var response = await _userService.CreateUserAsync(user, ERole.Common);
+            if(!response.Success)
+            {
+                return BadRequest(response.Message);
+            }
 
-            await _userRepository.AddAsync(user, new[] { ERole.Common });
-            await _unitOrWork.CompleteAsync();
-
-            var userResource = _mapper.Map<User, UserResource>(user);
+            var userResource = _mapper.Map<User, UserResource>(response.User);
             return Ok(userResource);
         }
     }

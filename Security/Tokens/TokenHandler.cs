@@ -5,9 +5,10 @@ using System.Linq;
 using System.Security.Claims;
 using JWTAPI.Core.Models;
 using JWTAPI.Core.Security.Hashing;
+using JWTAPI.Core.Security.Tokens;
 using Microsoft.Extensions.Options;
 
-namespace JWTAPI.Core.Security.Tokens
+namespace JWTAPI.Security.Tokens
 {
     public class TokenHandler : ITokenHandler
     {

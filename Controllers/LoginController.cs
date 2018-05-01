@@ -1,26 +1,21 @@
 using System.Threading.Tasks;
 using AutoMapper;
 using JWTAPI.Controllers.Resources;
-using JWTAPI.Core.Repositories;
-using JWTAPI.Core.Security.Hashing;
 using JWTAPI.Core.Security.Tokens;
+using JWTAPI.Core.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace JWTAPI.Controllers
 {
     public class AuthController : Controller
     {
-        private readonly IUserRepository _userRepository;
         private readonly IMapper _mapper;
-        private readonly IPasswordHasher _passwordHasher;
-        private readonly ITokenHandler _tokenHandler;
+        private readonly IAuthenticationService _authenticationService;
 
-        public AuthController(IUserRepository userRepository, IMapper mapper, IPasswordHasher passwordHasher, ITokenHandler tokenHandler)
+        public AuthController(IMapper mapper, IAuthenticationService authenticationService)
         {
+            _authenticationService = authenticationService;
             _mapper = mapper;
-            _userRepository = userRepository;
-            _passwordHasher = passwordHasher;
-            _tokenHandler = tokenHandler;
         }
 
         [Route("/api/login")]
@@ -32,21 +27,13 @@ namespace JWTAPI.Controllers
                 return BadRequest(ModelState);
             }
 
-            var user = await _userRepository.FindAsync(userCredentials.Email);
-
-            if (user == null)
+            var response = await _authenticationService.CreateAccessTokenAsync(userCredentials.Email, userCredentials.Password);
+            if(!response.Success)
             {
-                return NotFound();
+                return BadRequest(response.Message);
             }
 
-            if (!_passwordHasher.PasswordMatches(userCredentials.Password, user.Password))
-            {
-                return BadRequest();
-            }
-
-            var token = _tokenHandler.CreateAccessToken(user);
-            var accessTokenResource = _mapper.Map<AccessToken, AccessTokenResource>(token);
-
+            var accessTokenResource = _mapper.Map<AccessToken, AccessTokenResource>(response.Token);
             return Ok(accessTokenResource);
         }
 
@@ -59,28 +46,13 @@ namespace JWTAPI.Controllers
                 return BadRequest(ModelState);
             }
 
-            var refreshToken = _tokenHandler.TakeRefreshToken(refreshTokenResource.Token);
-
-            if(refreshToken == null)
+            var response = await _authenticationService.RefreshTokenAsync(refreshTokenResource.Token, refreshTokenResource.UserEmail);
+            if(!response.Success)
             {
-                return BadRequest("Invalid refresh token.");
+                return BadRequest(response.Message);
             }
-
-            if (refreshToken.IsExpired())
-            {
-                return BadRequest("Expired refresh token.");
-            }
-
-            var user = await _userRepository.FindAsync(refreshTokenResource.UserEmail);
-            if(user == null)
-            {
-                _tokenHandler.RevokeRefreshToken(refreshToken.Token);
-                return BadRequest("Invalid refresh token.");
-            }
-
-            var token = _tokenHandler.CreateAccessToken(user);
-            var tokenResource = _mapper.Map<AccessToken, AccessTokenResource>(token);
-
+           
+            var tokenResource = _mapper.Map<AccessToken, AccessTokenResource>(response.Token);
             return Ok(tokenResource);
         }
 
@@ -88,13 +60,12 @@ namespace JWTAPI.Controllers
         [HttpPost]
         public IActionResult RevokeToken([FromBody] RevokeTokenResource revokeTokenResource)
         {
-            if(!ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            _tokenHandler.RevokeRefreshToken(revokeTokenResource.Token);
-
+            _authenticationService.RevokeRefreshToken(revokeTokenResource.Token);
             return NoContent();
         }
     }

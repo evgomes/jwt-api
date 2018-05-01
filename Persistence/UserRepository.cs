@@ -28,7 +28,7 @@ namespace JWTAPI.Persistence
             _context.Users.Add(user);
         }
 
-        public async Task<User> FindAsync(string email)
+        public async Task<User> FindByEmailAsync(string email)
         {
             return await _context.Users.Include(u => u.UserRoles)
                                        .ThenInclude(ur => ur.Role)

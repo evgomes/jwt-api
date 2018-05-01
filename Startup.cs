@@ -3,7 +3,11 @@ using AutoMapper;
 using JWTAPI.Core.Repositories;
 using JWTAPI.Core.Security.Hashing;
 using JWTAPI.Core.Security.Tokens;
+using JWTAPI.Core.Services;
 using JWTAPI.Persistence;
+using JWTAPI.Security.Hashing;
+using JWTAPI.Security.Tokens;
+using JWTAPI.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -32,9 +36,12 @@ namespace JWTAPI
 
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
-            
+
             services.AddSingleton<IPasswordHasher, PasswordHasher>();
             services.AddSingleton<ITokenHandler, TokenHandler>();
+
+            services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IAuthenticationService, AuthenticationService>();
 
             services.Configure<TokenOptions>(Configuration.GetSection("TokenOptions"));
             var tokenOptions = Configuration.GetSection("TokenOptions").Get<TokenOptions>();
@@ -43,23 +50,23 @@ namespace JWTAPI
             services.AddSingleton(signingConfigurations);
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-                    .AddJwtBearer(jwtBearerOptions =>
+                .AddJwtBearer(jwtBearerOptions =>
+                {
+                    jwtBearerOptions.TokenValidationParameters = new TokenValidationParameters()
                     {
-                        jwtBearerOptions.TokenValidationParameters = new TokenValidationParameters()
-                        {
-                            ValidateActor = true,
-                            ValidateAudience = true,
-                            ValidateLifetime = true,
-                            ValidateIssuerSigningKey = true,
-                            ValidIssuer = tokenOptions.Issuer,
-                            ValidAudience = tokenOptions.Audience,
-                            IssuerSigningKey = signingConfigurations.Key,
-                            ClockSkew = TimeSpan.Zero
-                        };
-                    });
+                        ValidateActor = true,
+                        ValidateAudience = true,
+                        ValidateLifetime = true,
+                        ValidateIssuerSigningKey = true,
+                        ValidIssuer = tokenOptions.Issuer,
+                        ValidAudience = tokenOptions.Audience,
+                        IssuerSigningKey = signingConfigurations.Key,
+                        ClockSkew = TimeSpan.Zero
+                    };
+                });
 
             services.AddAutoMapper();
-            
+
             services.AddMvc();
         }
 

@@ -1,4 +1,4 @@
-namespace JWTAPI.Core.Security.Tokens
+namespace JWTAPI.Security.Tokens
 {
     public class TokenOptions
     {
