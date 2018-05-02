@@ -17,7 +17,7 @@ namespace JWTAPI.Security.Hashing
         {
             byte[] salt;
             byte[] buffer2;
-            if (password == null)
+            if (string.IsNullOrEmpty(password))
             {
                 throw new ArgumentNullException("password");
             }

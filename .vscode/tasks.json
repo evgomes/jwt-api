@@ -7,7 +7,7 @@
             "type": "process",
             "args": [
                 "build",
-                "${workspaceFolder}/JWTAPI.csproj"
+                "${workspaceFolder}/src/JWTAPI.csproj"
             ],
             "problemMatcher": "$msCompile"
         }

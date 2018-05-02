@@ -64,12 +64,14 @@ namespace JWTAPI.Security.Tokens
 
         private AccessToken BuildAccessToken(User user, RefreshToken refreshToken)
         {
+            var accessTokenExpiration = DateTime.UtcNow.AddSeconds(_tokenOptions.AccessTokenExpiration);
+
             var securityToken = new JwtSecurityToken
             (
                 issuer : _tokenOptions.Issuer,
                 audience : _tokenOptions.Audience,
                 claims : GetClaims(user),
-                expires : DateTime.UtcNow.AddSeconds(_tokenOptions.AccessTokenExpiration),
+                expires : accessTokenExpiration,
                 notBefore : DateTime.UtcNow,
                 signingCredentials : _signingConfigurations.SigningCredentials
             );
@@ -77,7 +79,7 @@ namespace JWTAPI.Security.Tokens
             var handler = new JwtSecurityTokenHandler();
             var accessToken = handler.WriteToken(securityToken);
 
-            return new AccessToken(accessToken, _tokenOptions.AccessTokenExpiration, refreshToken);
+            return new AccessToken(accessToken, accessTokenExpiration.Ticks, refreshToken);
         }
 
         private IEnumerable<Claim> GetClaims(User user)
