@@ -17,7 +17,6 @@ namespace JWTAPI.Services
             _tokenHandler = tokenHandler;
             _passwordHasher = passwordHasher;
             _userService = userService;
-
         }
 
         public async Task<TokenResponse> CreateAccessTokenAsync(string email, string password)

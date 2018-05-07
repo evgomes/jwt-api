@@ -33,8 +33,8 @@ namespace JWTAPI.Persistence
             {
                 var users = new List<User>
                 {
-                new User { Email = "admin@admin.com", Password = passwordHasher.HashPassword("12345678") },
-                new User { Email = "common@common.com", Password = passwordHasher.HashPassword("12345678") },
+                    new User { Email = "admin@admin.com", Password = passwordHasher.HashPassword("12345678") },
+                    new User { Email = "common@common.com", Password = passwordHasher.HashPassword("12345678") },
                 };
 
                 users[0].UserRoles.Add(new UserRole

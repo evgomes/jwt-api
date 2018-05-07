@@ -48,14 +48,14 @@ namespace tests.Security.Tokens
                 Password = "123",
                 UserRoles = new Collection<UserRole>
                 {
-                new UserRole
-                {
-                Role = new Role
-                {
-                Id = 1,
-                Name = ERole.Common.ToString()
-                }
-                }
+                    new UserRole
+                    {
+                        Role = new Role
+                        {
+                            Id = 1,
+                            Name = ERole.Common.ToString()
+                        }
+                    }
                 }
             };
         }
@@ -64,7 +64,7 @@ namespace tests.Security.Tokens
         public void Should_Create_Access_Token()
         {
             var accessToken = _tokenHandler.CreateAccessToken(_user);
-            
+
             Assert.NotNull(accessToken);
             Assert.NotNull(accessToken.RefreshToken);
             Assert.NotEmpty(accessToken.Token);
@@ -116,7 +116,7 @@ namespace tests.Security.Tokens
             var accessToken = _tokenHandler.CreateAccessToken(_user);
             _tokenHandler.RevokeRefreshToken(accessToken.RefreshToken.Token);
             var refreshToken = _tokenHandler.TakeRefreshToken(accessToken.RefreshToken.Token);
-            
+
             Assert.Null(refreshToken);
         }
     }
