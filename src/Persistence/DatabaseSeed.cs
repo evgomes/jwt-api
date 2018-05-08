@@ -8,7 +8,7 @@ namespace JWTAPI.Persistence
     /// <summary>
     /// EF Core already supports database seeding throught overriding "OnModelCreating", but I decided to create a separate seed class to avoid 
     /// injecting IPasswordHasher into AppDbContext.
-    /// To use database seeding into DbContext classes, check this link: https://docs.microsoft.com/en-us/ef/core/modeling/data-seeding
+    /// To understand how to use database seeding into DbContext classes, check this link: https://docs.microsoft.com/en-us/ef/core/modeling/data-seeding
     /// </summary>
     public class DatabaseSeed
     {

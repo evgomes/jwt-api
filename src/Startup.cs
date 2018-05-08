@@ -31,7 +31,7 @@ namespace JWTAPI
         {
             services.AddDbContext<AppDbContext>(options =>
             {
-                options.UseSqlServer(Configuration.GetConnectionString("jwtapi"));
+                options.UseInMemoryDatabase("jwtapi");
             });
 
             services.AddScoped<IUserRepository, UserRepository>();
