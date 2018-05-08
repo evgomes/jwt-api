@@ -1,6 +1,6 @@
 # JWT API
 
-![Build status](https://travis-ci.org/evgomes/jwt-api.svg?branch=master)
+![Build status](https://travis-ci.com/evgomes/jwt-api.svg?branch=master)
 
 Example API that shows how to implement JSON Web Token authentication and authorization with ASP.NET Core 2.0, built from scratch.
 
