@@ -1,0 +1,9 @@
+language: csharp
+mono: none
+dotnet: 2.0.0
+script:
+  - dotnet restore ./src
+  - dotnet restore ./tests
+  - dotnet build ./src/
+  - dotnet build ./tests/
+  - dotnet test ./tests/
