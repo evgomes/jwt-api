@@ -50,7 +50,6 @@ namespace JWTAPI.Services
             var user = await _userService.FindByEmailAsync(userEmail);
             if (user == null)
             {
-                _tokenHandler.RevokeRefreshToken(refreshToken);
                 return new TokenResponse(false, "Invalid refresh token.", null);
             }
 
