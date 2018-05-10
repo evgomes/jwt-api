@@ -14,7 +14,7 @@ Example API that shows how to implement JSON Web Token authentication and author
   
  ### Frameworks and Libraries
 
-The API is uses the following libraries and frameworks to deliver the functionalaties described above:
+The API uses the following libraries and frameworks to deliver the functionalaties described above:
  - [Entity Framewok Core](https://github.com/aspnet/EntityFrameworkCore) (for data access)
  - [AutoMapper](https://github.com/AutoMapper/AutoMapper) (for mapping between domain entities and resource classes)
  
@@ -62,7 +62,7 @@ There is already two predefined users configured to test the application, one wi
 
 #### Requesting access tokens
 
-To request access tokens, do a post request to `http://localhost:5000/api/login` passing a JSON object with a user e-mail and password. The response will be a JSON object with:
+To request access tokens, do a post request to `http://localhost:5000/api/login` sending a JSON object with user credentials. The response will be a JSON object with:
 
  - An access token which can be used to access protected API endpoints;
  - A request token, necessary to get a new access token when an access token expires;
@@ -76,14 +76,14 @@ To request access tokens, do a post request to `http://localhost:5000/api/login`
 
 There are two API endpoints that you can test:
 
- - `http://localhost:5000/api/protectedforcommonusers`: users of all roles can access this endpoint, since they specify a valid access token;
+ - `http://localhost:5000/api/protectedforcommonusers`: users of all roles can access this endpoint if a valid access token is specified;
  - `http://localhost:5000/api/protectedforadministrators`: only admin users can access this endpoint.
  
-With a valid access token in hands, make a GET request to one of the endpoints showed above adding the following header to your request:
+With a valid access token in hands, do a GET request to one of the endpoints showed above adding the following header to your request:
 
 `Authorization: Bearer your_valid_access_token_here`
 
-If you get a token as a common user (that is in the `Common` role) and make a request to the endpoint for all users, you will get a response as follows:
+If you get a token as a common user (a user that has the `Common` role) and make a request to the endpoint for all users, you will get a response as follows:
 
 ![Common user](https://raw.githubusercontent.com/evgomes/jwt-api/master/images/getting-protected-data.png)
 
@@ -91,17 +91,17 @@ But if you try to pass this token to the endpoint that requires admin permission
 
 ![403 Forbidden](https://raw.githubusercontent.com/evgomes/jwt-api/master/images/403-forbidden.png)
 
-If you log in as an admin and do a GET request to the admin endpoint, you will receive the following content as response:
+If you sign in as an admin and do a GET request to the admin endpoint, you will receive the following content as response:
 
 ![Admin restricted data](https://raw.githubusercontent.com/evgomes/jwt-api/master/images/getting-data-as-admin.png)
 
-If you pass an invalid token to any of the endpoints (a expired one of a token that was changed by hand, for example), you will get a `401 unauthorized` response.
+If you pass an invalid token to any of the endpoints (a expired one or a token that was changed by hand, for example), you will get a `401 unauthorized` response.
 
 ![401 Unauthorized](https://raw.githubusercontent.com/evgomes/jwt-api/master/images/unauthorized-for-admins.png)
 
 #### Refreshing tokens
 
-Imagine you have a single page application or a mobile app and you do not want that users have to log in again every time an access token expires. To deal with it, you can get a new token with a valid refresh token. This way, you can keep users logged in without explicitly asking them to log in again.
+Imagine you have a single page application or a mobile app and you do not want that users have to log in again every time an access token expires. To deal with it, you can get a new token with a valid refresh token. This way, you can keep users logged in without explicitly asking them to sign in again.
 
 To refresh a token, do a POST request to `http://localhost:5000/api/token/refresh` passing a valid refresh token and the user's e-mail in the body of the request.
 
@@ -136,6 +136,6 @@ You will get a `204 No Content` response after calling this endpoint.
 
 ### Considerations
 
-This example was created with the intent of helping people who have doubts on how to implement authentication and authorization in APIs to consume these features in different client applications. JSON Web Tokens are easy to implement and are secure to achieve this purpose.
+This example was created with the intent of helping people who have doubts on how to implement authentication and authorization in APIs to consume these features in different client applications. JSON Web Tokens are easy to implement and secure.
 
-If you have doubts about the implementation deatils or if you find a bug, please, open an issue. If you have ideas on how to improve the API or if you want to add a new functionality or fix a bug, send a pull request.
+If you have doubts about implementation deatils or if you find a bug, please, open an issue. If you have ideas on how to improve the API or if you want to add a new functionality or fix a bug, please, send a pull request.
