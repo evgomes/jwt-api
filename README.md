@@ -33,7 +33,7 @@ $ dotnet run
 
 #### Creating users
 
-To create a user, do a post request to `http://localhost:5000/api/users` specifying a valid e-mail and password. The result will be a new user with common users permission.
+To create a user, make a post request to `http://localhost:5000/api/users` specifying a valid e-mail and password. The result will be a new user with common users permission.
 
 ```
 {
@@ -62,7 +62,7 @@ There is already two predefined users configured to test the application, one wi
 
 #### Requesting access tokens
 
-To request access tokens, do a post request to `http://localhost:5000/api/login` sending a JSON object with user credentials. The response will be a JSON object with:
+To request access tokens, make a post request to `http://localhost:5000/api/login` sending a JSON object with user credentials. The response will be a JSON object with:
 
  - An access token which can be used to access protected API endpoints;
  - A request token, necessary to get a new access token when an access token expires;
@@ -79,7 +79,7 @@ There are two API endpoints that you can test:
  - `http://localhost:5000/api/protectedforcommonusers`: users of all roles can access this endpoint if a valid access token is specified;
  - `http://localhost:5000/api/protectedforadministrators`: only admin users can access this endpoint.
  
-With a valid access token in hands, do a GET request to one of the endpoints showed above adding the following header to your request:
+With a valid access token in hands, make a GET request to one of the endpoints showed above adding the following header to your request:
 
 `Authorization: Bearer your_valid_access_token_here`
 
@@ -91,7 +91,7 @@ But if you try to pass this token to the endpoint that requires admin permission
 
 ![403 Forbidden](https://raw.githubusercontent.com/evgomes/jwt-api/master/images/403-forbidden.png)
 
-If you sign in as an admin and do a GET request to the admin endpoint, you will receive the following content as response:
+If you sign in as an admin and make a GET request to the admin endpoint, you will receive the following content as response:
 
 ![Admin restricted data](https://raw.githubusercontent.com/evgomes/jwt-api/master/images/getting-data-as-admin.png)
 
@@ -103,7 +103,7 @@ If you pass an invalid token to any of the endpoints (a expired one or a token t
 
 Imagine you have a single page application or a mobile app and you do not want that users have to log in again every time an access token expires. To deal with it, you can get a new token with a valid refresh token. This way, you can keep users logged in without explicitly asking them to sign in again.
 
-To refresh a token, do a POST request to `http://localhost:5000/api/token/refresh` passing a valid refresh token and the user's e-mail in the body of the request.
+To refresh a token, make a POST request to `http://localhost:5000/api/token/refresh` passing a valid refresh token and the user's e-mail in the body of the request.
 
 ```
 {
