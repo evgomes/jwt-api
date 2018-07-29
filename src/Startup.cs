@@ -54,7 +54,6 @@ namespace JWTAPI
                 {
                     jwtBearerOptions.TokenValidationParameters = new TokenValidationParameters()
                     {
-                        ValidateActor = true,
                         ValidateAudience = true,
                         ValidateLifetime = true,
                         ValidateIssuerSigningKey = true,

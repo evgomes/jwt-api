@@ -122,7 +122,7 @@ If the request token is invalid, you will receive a 400 response:
 
 #### Revoking refresh tokens
 
-Now imagine you want the user to sign out, or you want to revoke a refresh token by any reason. You can revoke a refresh token doing a POST request to `http://localhost:5000/api/token/revoke`, passing a valid refresh token into the body of the request.
+Now imagine you want the user to sign out, or you want to revoke a refresh token by any reason. You can revoke a refresh token making a POST request to `http://localhost:5000/api/token/revoke`, passing a valid refresh token into the body of the request.
 
 ```
 {
