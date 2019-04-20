@@ -8,7 +8,7 @@ using Microsoft.Extensions.Options;
 using Moq;
 using Xunit;
 
-namespace tests.Security.Tokens
+namespace JWTPAPI.Tests.Security.Tokens
 {
     public class TokenHandlerTests
     {

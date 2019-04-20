@@ -8,7 +8,7 @@ using JWTAPI.Services;
 using Moq;
 using Xunit;
 
-namespace tests.Services
+namespace JWTPAPI.Tests.Services
 {
     public class UserServiceTests
     {
