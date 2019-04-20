@@ -1,9 +1,0 @@
-language: csharp
-mono: none
-dotnet: 2.1.505
-script:
-  - dotnet restore ./src/JWTAPI/JWTAPI/
-  - dotnet restore ./tests/JWTAPI.Tests/
-  - dotnet build ./src/JWTAPI/JWTAPI/
-  - dotnet build ./tests/JWTAPI.Tests/
-  - dotnet test ./tests/JWTAPI.Tests/
