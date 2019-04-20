@@ -1,9 +1,9 @@
 language: csharp
 mono: none
-dotnet: 2.0.0
+dotnet: 2.1.505
 script:
-  - dotnet restore ./src
-  - dotnet restore ./tests
-  - dotnet build ./src/
-  - dotnet build ./tests/
-  - dotnet test ./tests/
+  - dotnet restore ./src/JWTAPI/JWTAPI/
+  - dotnet restore ./tests/JWTAPI.Tests/
+  - dotnet build ./src/JWTAPI/JWTAPI/
+  - dotnet build ./tests/JWTAPI.Tests/
+  - dotnet test ./tests/JWTAPI.Tests/
