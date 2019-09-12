@@ -51,7 +51,7 @@ namespace JWTAPI.Security.Tokens
             TakeRefreshToken(token);
         }
 
-        private RefreshToken BuildRefreshToken(User user)
+        private RefreshToken BuildRefreshToken()
         {
             var refreshToken = new RefreshToken
             (
