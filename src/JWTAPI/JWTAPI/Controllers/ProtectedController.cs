@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace JWTAPI.Controllers
 {
+    [ApiController]
     public class ProtectedController : Controller
     {
         [HttpGet]

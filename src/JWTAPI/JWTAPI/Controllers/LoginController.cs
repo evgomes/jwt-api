@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace JWTAPI.Controllers
 {
+    [ApiController]
     public class AuthController : Controller
     {
         private readonly IMapper _mapper;

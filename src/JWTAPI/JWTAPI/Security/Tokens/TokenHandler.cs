@@ -27,7 +27,7 @@ namespace JWTAPI.Security.Tokens
 
         public AccessToken CreateAccessToken(User user)
         {
-            var refreshToken = BuildRefreshToken(user);
+            var refreshToken = BuildRefreshToken();
             var accessToken = BuildAccessToken(user, refreshToken);
             _refreshTokens.Add(refreshToken);
 

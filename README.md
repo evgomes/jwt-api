@@ -1,6 +1,6 @@
 # JWT API
 
-Example API that shows how to implement JSON Web Token authentication and authorization with ASP.NET Core 2.0, built from scratch.
+Example API that shows how to implement JSON Web Token authentication and authorization with ASP.NET Core 3.1, built from scratch.
 
 ### Features
  - User registration;
@@ -18,7 +18,11 @@ The API uses the following libraries and frameworks to deliver the functionalati
  
 ### How to test
 
-You will need a way to test the API endpoints. I recommend you to use [Postman](https://www.getpostman.com/).
+In the last update, I added [Swagger](https://swagger.io/) to document the API routes, as well as to simplify the way of testing the API. You can run the application and navigate to `/swagger` to see the API documentation:
+
+![Swagger](https://raw.githubusercontent.com/evgomes/jwt-api/master/images/swagger.png)
+
+You can also test the API using a tool such as [Postman](https://www.getpostman.com/). I describe how to use Postman to test the API below.
 
 First of all, clone this repository and open it in terminal. Then restore all dependencies and run the project. Since it is configured to use [Entity Framework InMemory](https://docs.microsoft.com/en-us/ef/core/providers/in-memory/) provider, the project will run without any problems.
 
