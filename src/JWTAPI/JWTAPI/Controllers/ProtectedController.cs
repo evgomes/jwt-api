@@ -19,7 +19,7 @@ namespace JWTAPI.Controllers
         [Route("/api/protectedforadministrators")]
         public IActionResult GetProtectedDataForAdmin()
         {
-            return Ok("Hello admin!.");
+            return Ok("Hello admin!");
         }
     }
 }

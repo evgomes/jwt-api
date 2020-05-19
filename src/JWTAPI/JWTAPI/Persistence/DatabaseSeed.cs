@@ -21,8 +21,8 @@ namespace JWTAPI.Persistence
 
                 var roles = new List<Role>
                 {
-                new Role { Name = ERole.Common.ToString() },
-                new Role { Name = ERole.Administrator.ToString() }
+                new Role { Name = ApplicationRole.Common.ToString() },
+                new Role { Name = ApplicationRole.Administrator.ToString() }
                 };
 
                 context.Roles.AddRange(roles);
@@ -39,12 +39,12 @@ namespace JWTAPI.Persistence
 
                 users[0].UserRoles.Add(new UserRole
                 {
-                    RoleId = context.Roles.SingleOrDefault(r => r.Name == ERole.Administrator.ToString()).Id
+                    RoleId = context.Roles.SingleOrDefault(r => r.Name == ApplicationRole.Administrator.ToString()).Id
                 });
 
                 users[1].UserRoles.Add(new UserRole
                 {
-                    RoleId = context.Roles.SingleOrDefault(r => r.Name == ERole.Common.ToString()).Id
+                    RoleId = context.Roles.SingleOrDefault(r => r.Name == ApplicationRole.Common.ToString()).Id
                 });
 
                 context.Users.AddRange(users);

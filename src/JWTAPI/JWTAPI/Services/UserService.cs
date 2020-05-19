@@ -20,7 +20,7 @@ namespace JWTAPI.Services
             _userRepository = userRepository;
         }
 
-        public async Task<CreateUserResponse> CreateUserAsync(User user, params ERole[] userRoles)
+        public async Task<CreateUserResponse> CreateUserAsync(User user, params ApplicationRole[] userRoles)
         {
             var existingUser = await _userRepository.FindByEmailAsync(user.Email);
             if(existingUser != null)

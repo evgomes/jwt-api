@@ -48,7 +48,7 @@ namespace JWTPAPI.Tests.Services
                                     Role = new Role
                                     {
                                         Id = 1,
-                                        Name = ERole.Common.ToString()
+                                        Name = ApplicationRole.Common.ToString()
                                     }
                                 }
                             }

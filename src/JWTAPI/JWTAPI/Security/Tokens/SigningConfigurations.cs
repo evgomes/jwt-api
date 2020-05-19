@@ -1,21 +1,20 @@
 using System.Security.Cryptography;
+using System.Text;
 using Microsoft.IdentityModel.Tokens;
 
 namespace JWTAPI.Security.Tokens
 {
     public class SigningConfigurations
     {
-        public SecurityKey Key { get; }
+        public SecurityKey SecurityKey { get; }
         public SigningCredentials SigningCredentials { get; }
 
-        public SigningConfigurations()
+        public SigningConfigurations(string key)
         {
-            using(var provider = new RSACryptoServiceProvider(2048))
-            {
-                Key = new RsaSecurityKey(provider.ExportParameters(true));
-            }
+            var keyBytes = Encoding.ASCII.GetBytes(key);
 
-            SigningCredentials = new SigningCredentials(Key, SecurityAlgorithms.RsaSha256Signature);
+            SecurityKey = new SymmetricSecurityKey(keyBytes);
+            SigningCredentials = new SigningCredentials(SecurityKey, SecurityAlgorithms.HmacSha256Signature);
         }
     }
 }

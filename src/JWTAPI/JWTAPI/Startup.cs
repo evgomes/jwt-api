@@ -1,4 +1,6 @@
 ﻿using System;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 using AutoMapper;
 using JWTAPI.Core.Repositories;
 using JWTAPI.Core.Security.Hashing;
@@ -12,7 +14,6 @@ using JWTAPI.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -22,12 +23,12 @@ namespace JWTAPI
 {
 	public class Startup
 	{
+		public IConfiguration Configuration { get; }
+
 		public Startup(IConfiguration configuration)
 		{
 			Configuration = configuration;
 		}
-
-		public IConfiguration Configuration { get; }
 
 		public void ConfigureServices(IServiceCollection services)
 		{
@@ -52,7 +53,7 @@ namespace JWTAPI
 			services.Configure<TokenOptions>(Configuration.GetSection("TokenOptions"));
 			var tokenOptions = Configuration.GetSection("TokenOptions").Get<TokenOptions>();
 
-			var signingConfigurations = new SigningConfigurations();
+			var signingConfigurations = new SigningConfigurations(tokenOptions.Secret);
 			services.AddSingleton(signingConfigurations);
 
 			services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -65,7 +66,7 @@ namespace JWTAPI
 						ValidateIssuerSigningKey = true,
 						ValidIssuer = tokenOptions.Issuer,
 						ValidAudience = tokenOptions.Audience,
-						IssuerSigningKey = signingConfigurations.Key,
+						IssuerSigningKey = signingConfigurations.SecurityKey,
 						ClockSkew = TimeSpan.Zero
 					};
 				});

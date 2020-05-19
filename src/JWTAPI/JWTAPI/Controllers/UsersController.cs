@@ -30,7 +30,7 @@ namespace JWTAPI.Controllers
 
             var user = _mapper.Map<UserCredentialsResource, User>(userCredentials);
             
-            var response = await _userService.CreateUserAsync(user, ERole.Common);
+            var response = await _userService.CreateUserAsync(user, ApplicationRole.Common);
             if(!response.Success)
             {
                 return BadRequest(response.Message);

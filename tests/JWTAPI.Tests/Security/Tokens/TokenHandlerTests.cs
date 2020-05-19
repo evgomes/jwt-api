@@ -18,6 +18,7 @@ namespace JWTPAPI.Tests.Security.Tokens
         private User _user;
 
         private ITokenHandler _tokenHandler;
+        private string _testKey = "just_a_long_test_key_to_use_for_tokens";
 
         public TokenHandlerTests()
         {
@@ -39,7 +40,7 @@ namespace JWTPAPI.Tests.Security.Tokens
             _passwordHasher = new Mock<IPasswordHasher>();
             _passwordHasher.Setup(ph => ph.HashPassword(It.IsAny<string>())).Returns("123");
 
-            _signingConfigurations = new SigningConfigurations();
+            _signingConfigurations = new SigningConfigurations(_testKey);
 
             _user = new User
             {
@@ -53,7 +54,7 @@ namespace JWTPAPI.Tests.Security.Tokens
                         Role = new Role
                         {
                             Id = 1,
-                            Name = ERole.Common.ToString()
+                            Name = ApplicationRole.Common.ToString()
                         }
                     }
                 }

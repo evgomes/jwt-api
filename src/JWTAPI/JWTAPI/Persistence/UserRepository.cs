@@ -15,7 +15,7 @@ namespace JWTAPI.Persistence
             _context = context;
         }
 
-        public async Task AddAsync(User user, ERole[] userRoles)
+        public async Task AddAsync(User user, ApplicationRole[] userRoles)
         {
             var roleNames = userRoles.Select(r => r.ToString()).ToList();
             var roles = await _context.Roles.Where(r => roleNames.Contains(r.Name)).ToListAsync();

@@ -36,7 +36,7 @@ namespace JWTPAPI.Tests.Services
             _userRepository.Setup(r => r.FindByEmailAsync("secondtest@secondtest.com"))
                 .Returns(Task.FromResult<User>(null));
 
-            _userRepository.Setup(r => r.AddAsync(It.IsAny<User>(), It.IsAny<ERole[]>())).Returns(Task.CompletedTask);
+            _userRepository.Setup(r => r.AddAsync(It.IsAny<User>(), It.IsAny<ApplicationRole[]>())).Returns(Task.CompletedTask);
 
             _unitOfWork = new Mock<IUnitOfWork>();
             _unitOfWork.Setup(u => u.CompleteAsync()).Returns(Task.CompletedTask);
@@ -47,7 +47,7 @@ namespace JWTPAPI.Tests.Services
         {
             var user = new User { Email = "mytestuser@mytestuser.com", Password = "123", UserRoles = new Collection<UserRole>() };
             
-            var response = await _userService.CreateUserAsync(user, ERole.Common);
+            var response = await _userService.CreateUserAsync(user, ApplicationRole.Common);
 
             Assert.NotNull(response);
             Assert.True(response.Success);
@@ -60,7 +60,7 @@ namespace JWTPAPI.Tests.Services
         {
             var user = new User { Email = "test@test.com", Password = "123", UserRoles = new Collection<UserRole>() };
         
-            var response = await _userService.CreateUserAsync(user, ERole.Common);
+            var response = await _userService.CreateUserAsync(user, ApplicationRole.Common);
 
             Assert.False(response.Success);
             Assert.Equal("Email already in use.", response.Message);
