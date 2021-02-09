@@ -1,6 +1,6 @@
 # JWT API
 
-Example API that shows how to implement JSON Web Token authentication and authorization with ASP.NET Core 3.1, built from scratch.
+This example API shows how to implement JSON Web Token authentication and authorization with ASP.NET Core 3.1, built from scratch.
 
 ### Features
  - User registration;
@@ -8,23 +8,23 @@ Example API that shows how to implement JSON Web Token authentication and author
  - Role-based authorization;
  - Login via access token creation;
  - Refresh tokens, to create new access tokens when access tokens expire;
- - Rovoking refresh tokens.
+ - Revoking refresh tokens.
   
- ### Frameworks and Libraries
+### Frameworks and Libraries
 
-The API uses the following libraries and frameworks to deliver the functionalaties described above:
- - [Entity Framewok Core](https://github.com/aspnet/EntityFrameworkCore) (for data access)
+The API uses the following libraries and frameworks to deliver the functionalities described above:
+ - [Entity Framework Core](https://github.com/aspnet/EntityFrameworkCore) (for data access)
  - [AutoMapper](https://github.com/AutoMapper/AutoMapper) (for mapping between domain entities and resource classes)
  
 ### How to test
 
-In the last update, I added [Swagger](https://swagger.io/) to document the API routes, as well as to simplify the way of testing the API. You can run the application and navigate to `/swagger` to see the API documentation:
+In the last update, I have added [Swagger](https://swagger.io/) to document the API routes, as well as to simplify the way of testing the API. You can run the application and navigate to `/swagger` to see the API documentation:
 
 ![Swagger](https://raw.githubusercontent.com/evgomes/jwt-api/master/images/swagger.png)
 
 You can also test the API using a tool such as [Postman](https://www.getpostman.com/). I describe how to use Postman to test the API below.
 
-First of all, clone this repository and open it in terminal. Then restore all dependencies and run the project. Since it is configured to use [Entity Framework InMemory](https://docs.microsoft.com/en-us/ef/core/providers/in-memory/) provider, the project will run without any problems.
+First of all, clone this repository and open it in a terminal. Then restore all the dependencies and run the project. Since it is configured to use [Entity Framework InMemory](https://docs.microsoft.com/en-us/ef/core/providers/in-memory/) provider, the project will run without any problems.
 
 ```sh
 $ git clone https://github.com/evgomes/jwt-api.git
@@ -35,7 +35,7 @@ $ dotnet run
 
 #### Creating users
 
-To create a user, make a post request to `http://localhost:5000/api/users` specifying a valid e-mail and password. The result will be a new user with common users permission.
+To create a user, make a `POST` request to `http://localhost:5000/api/users` specifying a valid e-mail and password. The result will be a new user with common users permission.
 
 ```
 {
@@ -46,7 +46,7 @@ To create a user, make a post request to `http://localhost:5000/api/users` speci
 
 ![Creating an user](https://raw.githubusercontent.com/evgomes/jwt-api/master/images/creating-user.png)
 
-There is already two predefined users configured to test the application, one with common users permission and another with admin permissions.
+There are already two pre-defined users configured to test the application, one with common users permission and another with admin permissions.
 
 ```
 {
@@ -64,13 +64,13 @@ There is already two predefined users configured to test the application, one wi
 
 #### Requesting access tokens
 
-To request access tokens, make a post request to `http://localhost:5000/api/login` sending a JSON object with user credentials. The response will be a JSON object with:
+To request the access tokens, make a `POST` request to `http://localhost:5000/api/login` sending a JSON object with user credentials. The response will be a JSON object with:
 
  - An access token which can be used to access protected API endpoints;
  - A request token, necessary to get a new access token when an access token expires;
  - A long value that represents the expiration date of the token.
  
- Access tokens expire after 30 seconds, and refresh tokens after 60 seconds (you can change it in `appseting.json`).
+ Access tokens expire after 30 seconds, and refresh tokens after 60 seconds (you can change this in the `appsetings.json`).
 
 ![Requesting a token](https://raw.githubusercontent.com/evgomes/jwt-api/master/images/loging-in.png)
 
@@ -81,7 +81,7 @@ There are two API endpoints that you can test:
  - `http://localhost:5000/api/protectedforcommonusers`: users of all roles can access this endpoint if a valid access token is specified;
  - `http://localhost:5000/api/protectedforadministrators`: only admin users can access this endpoint.
  
-With a valid access token in hands, make a GET request to one of the endpoints showed above adding the following header to your request:
+With a valid access token in hands, make a `GET` request to one of the endpoints mentioned above with the following header added to your request:
 
 `Authorization: Bearer your_valid_access_token_here`
 
@@ -93,7 +93,7 @@ But if you try to pass this token to the endpoint that requires admin permission
 
 ![403 Forbidden](https://raw.githubusercontent.com/evgomes/jwt-api/master/images/403-forbidden.png)
 
-If you sign in as an admin and make a GET request to the admin endpoint, you will receive the following content as response:
+If you sign in as an admin and make a `GET` request to the admin endpoint, you will receive the following content as response:
 
 ![Admin restricted data](https://raw.githubusercontent.com/evgomes/jwt-api/master/images/getting-data-as-admin.png)
 
@@ -103,9 +103,9 @@ If you pass an invalid token to any of the endpoints (a expired one or a token t
 
 #### Refreshing tokens
 
-Imagine you have a single page application or a mobile app and you do not want that users have to log in again every time an access token expires. To deal with it, you can get a new token with a valid refresh token. This way, you can keep users logged in without explicitly asking them to sign in again.
+Imagine you have a single page application or a mobile app and you do not want the users to have to log in again every time an access token expires. To deal with this, you can get a new token with a valid refresh token. This way, you can keep users logged in without explicitly asking them to sign in again.
 
-To refresh a token, make a POST request to `http://localhost:5000/api/token/refresh` passing a valid refresh token and the user's e-mail in the body of the request.
+To refresh a token, make a `POST` request to `http://localhost:5000/api/token/refresh` passing a valid refresh token and the user's e-mail in the body of the request.
 
 ```
 {
@@ -124,7 +124,7 @@ If the request token is invalid, you will receive a 400 response:
 
 #### Revoking refresh tokens
 
-Now imagine you want the user to sign out, or you want to revoke a refresh token by any reason. You can revoke a refresh token making a POST request to `http://localhost:5000/api/token/revoke`, passing a valid refresh token into the body of the request.
+Now imagine that you want the user to sign out, or you want to revoke a refresh token for any reason. You can revoke a refresh token making a POST request to `http://localhost:5000/api/token/revoke`, passing a valid refresh token into the body of the request.
 
 ```
 {
@@ -140,4 +140,4 @@ You will get a `204 No Content` response after calling this endpoint.
 
 This example was created with the intent of helping people who have doubts on how to implement authentication and authorization in APIs to consume these features in different client applications. JSON Web Tokens are easy to implement and secure.
 
-If you have doubts about implementation deatils or if you find a bug, please, open an issue. If you have ideas on how to improve the API or if you want to add a new functionality or fix a bug, please, send a pull request.
+If you have doubts about the implementation details or if you find a bug, please, open an issue. If you have ideas on how to improve the API or if you want to add a new functionality or fix a bug, please, send a pull request.
