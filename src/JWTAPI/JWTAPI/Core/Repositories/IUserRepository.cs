@@ -1,4 +1,3 @@
-using System.Threading.Tasks;
 using JWTAPI.Core.Models;
 
 namespace JWTAPI.Core.Repositories

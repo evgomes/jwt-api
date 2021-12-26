@@ -1,8 +1,4 @@
-﻿using System;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using AutoMapper;
-using JWTAPI.Core.Repositories;
+﻿using JWTAPI.Core.Repositories;
 using JWTAPI.Core.Security.Hashing;
 using JWTAPI.Core.Security.Tokens;
 using JWTAPI.Core.Services;
@@ -12,16 +8,12 @@ using JWTAPI.Security.Hashing;
 using JWTAPI.Security.Tokens;
 using JWTAPI.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 
 namespace JWTAPI
 {
-	public class Startup
+    public class Startup
 	{
 		public IConfiguration Configuration { get; }
 

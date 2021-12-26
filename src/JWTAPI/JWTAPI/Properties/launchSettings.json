@@ -17,7 +17,7 @@
 				"ASPNETCORE_ENVIRONMENT": "Development"
 			}
 		},
-		"Supermarket.API": {
+		"JWTAPI": {
 			"commandName": "Project",
 			"launchBrowser": true,
 			"launchUrl": "swagger",

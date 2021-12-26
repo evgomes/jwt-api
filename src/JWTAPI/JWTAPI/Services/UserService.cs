@@ -1,4 +1,3 @@
-using System.Threading.Tasks;
 using JWTAPI.Core.Models;
 using JWTAPI.Core.Repositories;
 using JWTAPI.Core.Security.Hashing;

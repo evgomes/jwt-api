@@ -1,4 +1,3 @@
-using System.Linq;
 using AutoMapper;
 using JWTAPI.Controllers.Resources;
 using JWTAPI.Core.Models;

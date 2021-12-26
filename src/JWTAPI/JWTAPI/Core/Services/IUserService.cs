@@ -1,4 +1,3 @@
-using System.Threading.Tasks;
 using JWTAPI.Core.Models;
 using JWTAPI.Core.Services.Communication;
 
