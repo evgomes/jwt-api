@@ -1,5 +1,3 @@
-using System.Linq;
-using System.Threading.Tasks;
 using JWTAPI.Core.Models;
 using JWTAPI.Core.Repositories;
 using Microsoft.EntityFrameworkCore;

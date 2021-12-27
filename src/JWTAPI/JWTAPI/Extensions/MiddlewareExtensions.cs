@@ -1,13 +1,9 @@
-﻿using Microsoft.AspNetCore.Builder;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.OpenApi.Models;
-using System;
-using System.IO;
+﻿using Microsoft.OpenApi.Models;
 using System.Reflection;
 
 namespace JWTAPI.Extensions
 {
-	public static class MiddlewareExtensions
+    public static class MiddlewareExtensions
 	{
 		public static IServiceCollection AddCustomSwagger(this IServiceCollection services)
 		{
@@ -16,12 +12,12 @@ namespace JWTAPI.Extensions
 				cfg.SwaggerDoc("v1", new OpenApiInfo
 				{
 					Title = "JWT API",
-					Version = "v3",
-					Description = "Example API that shows how to implement JSON Web Token authentication and authorization with ASP.NET Core 3.1, built from scratch.",
+					Version = "v4",
+					Description = "Example API that shows how to implement JSON Web Token authentication and authorization with ASP.NET 6, built from scratch.",
 					Contact = new OpenApiContact
 					{
 						Name = "Evandro Gayer Gomes",
-						Url = new Uri("https://evandroggomes.com.br/")
+						Url = new Uri("https://www.linkedin.com/in/evandro-gayer-gomes/?locale=en_US")
 					},
 					License = new OpenApiLicense
 					{
@@ -47,10 +43,6 @@ namespace JWTAPI.Extensions
 						new [] { string.Empty }
 					}
 				});
-
-				var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-				var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
-				cfg.IncludeXmlComments(xmlPath);
 			});
 
 			return services;

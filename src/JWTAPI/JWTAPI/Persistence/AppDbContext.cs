@@ -1,4 +1,3 @@
-using JetBrains.Annotations;
 using JWTAPI.Core.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -10,7 +9,7 @@ namespace JWTAPI.Persistence
         public DbSet<Role> Roles { get; set; }
 
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
-        {}
+        { }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

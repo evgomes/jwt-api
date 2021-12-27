@@ -1,5 +1,3 @@
-using System;
-
 namespace JWTAPI.Core.Security.Tokens
 {
     public abstract class JsonWebToken
