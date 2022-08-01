@@ -34,7 +34,7 @@ namespace JWTAPI.Services
 
         public async Task<TokenResponse> RefreshTokenAsync(string refreshToken, string userEmail)
         {
-            var token = _tokenHandler.TakeRefreshToken(refreshToken);
+            var token = _tokenHandler.TakeRefreshToken(refreshToken, userEmail);
 
             if (token == null)
             {
@@ -56,9 +56,9 @@ namespace JWTAPI.Services
             return new TokenResponse(true, null, accessToken);
         }
 
-        public void RevokeRefreshToken(string refreshToken)
+        public void RevokeRefreshToken(string refreshToken, string userEmail)
         {
-            _tokenHandler.RevokeRefreshToken(refreshToken);
+            _tokenHandler.RevokeRefreshToken(refreshToken, userEmail);
         }
     }
 }

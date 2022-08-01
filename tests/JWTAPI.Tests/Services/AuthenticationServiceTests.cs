@@ -72,16 +72,16 @@ namespace JWTPAPI.Tests.Services
                                      )
                                  );
 
-            _tokenHandler.Setup(h => h.TakeRefreshToken("abc"))
+            _tokenHandler.Setup(h => h.TakeRefreshToken("abc", It.IsAny<string>()))
                          .Returns(new RefreshToken("abc", DateTime.UtcNow.AddSeconds(60).Ticks));
 
-            _tokenHandler.Setup(h => h.TakeRefreshToken("expired"))
+            _tokenHandler.Setup(h => h.TakeRefreshToken("expired", It.IsAny<string>()))
                          .Returns(new RefreshToken("expired", DateTime.UtcNow.AddSeconds(-60).Ticks));
 
-            _tokenHandler.Setup(h => h.TakeRefreshToken("invalid"))
+            _tokenHandler.Setup(h => h.TakeRefreshToken("invalid", It.IsAny<string>()))
                          .Returns<RefreshToken>(null);
 
-            _tokenHandler.Setup(h => h.RevokeRefreshToken("abc"))
+            _tokenHandler.Setup(h => h.RevokeRefreshToken("abc", It.IsAny<string>()))
                          .Callback(() => _calledRefreshToken = true);
         }
 
@@ -153,7 +153,7 @@ namespace JWTPAPI.Tests.Services
         [Fact]
         public void Should_Revoke_Refresh_Token()
         {
-            _authenticationService.RevokeRefreshToken("abc");
+            _authenticationService.RevokeRefreshToken("abc", "test@test.com");
             
             Assert.True(_calledRefreshToken);
         }

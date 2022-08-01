@@ -6,6 +6,6 @@ namespace JWTAPI.Core.Services
     {
          Task<TokenResponse> CreateAccessTokenAsync(string email, string password);
          Task<TokenResponse> RefreshTokenAsync(string refreshToken, string userEmail);
-         void RevokeRefreshToken(string refreshToken);
+         void RevokeRefreshToken(string refreshToken, string userEmail);
     }
 }
