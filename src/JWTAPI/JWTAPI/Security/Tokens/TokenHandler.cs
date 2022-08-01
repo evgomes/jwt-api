@@ -9,7 +9,7 @@ namespace JWTAPI.Security.Tokens
 {
     public class TokenHandler : ITokenHandler
     {
-        private readonly ISet<RefreshToken> _refreshTokens = new HashSet<RefreshToken>();
+        private readonly ISet<RefreshTokenWithEmail> _refreshTokens = new HashSet<RefreshTokenWithEmail>();
 
         private readonly TokenOptions _tokenOptions;
         private readonly SigningConfigurations _signingConfigurations;
@@ -26,26 +26,33 @@ namespace JWTAPI.Security.Tokens
         {
             var refreshToken = BuildRefreshToken();
             var accessToken = BuildAccessToken(user, refreshToken);
-            _refreshTokens.Add(refreshToken);
+            _refreshTokens.Add(new RefreshTokenWithEmail 
+            {
+                Email = user.Email,
+                RefreshToken = refreshToken,
+            });
 
             return accessToken;
         }
 
-        public RefreshToken TakeRefreshToken(string token)
+        public RefreshToken TakeRefreshToken(string token, string userEmail)
         {
-            if (string.IsNullOrWhiteSpace(token))
+            if (string.IsNullOrWhiteSpace(token) || string.IsNullOrWhiteSpace(userEmail))
                 return null;
 
-            var refreshToken = _refreshTokens.SingleOrDefault(t => t.Token == token);
-            if (refreshToken != null)
-                _refreshTokens.Remove(refreshToken);
-
-            return refreshToken;
+            var refreshTokenWithEmail = _refreshTokens.SingleOrDefault(t => t.RefreshToken.Token == token && t.Email == userEmail);
+            if(refreshTokenWithEmail == null)
+			{
+                return null;
+			}
+            
+            _refreshTokens.Remove(refreshTokenWithEmail);
+            return refreshTokenWithEmail.RefreshToken;
         }
 
-        public void RevokeRefreshToken(string token)
+        public void RevokeRefreshToken(string token, string userEmail)
         {
-            TakeRefreshToken(token);
+            TakeRefreshToken(token, userEmail);
         }
 
         private RefreshToken BuildRefreshToken()

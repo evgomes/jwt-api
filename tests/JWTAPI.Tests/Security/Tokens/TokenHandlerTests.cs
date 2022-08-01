@@ -79,7 +79,7 @@ namespace JWTPAPI.Tests.Security.Tokens
         public void Should_Take_Existing_Refresh_Token()
         {
             var accessToken = _tokenHandler.CreateAccessToken(_user);
-            var refreshToken = _tokenHandler.TakeRefreshToken(accessToken.RefreshToken.Token);
+            var refreshToken = _tokenHandler.TakeRefreshToken(accessToken.RefreshToken.Token, "test@test.com");
 
             Assert.NotNull(refreshToken);
             Assert.Equal(accessToken.RefreshToken.Token, refreshToken.Token);
@@ -87,16 +87,33 @@ namespace JWTPAPI.Tests.Security.Tokens
         }
 
         [Fact]
-        public void Should_Return_Null_For_Empty_Refresh_Token_When_Trying_To_Take()
+        public void Should_Return_Null_For_Empty_Refresh_Token_When_Trying_To_Take_Refresh_Token()
         {
-            var refreshToken = _tokenHandler.TakeRefreshToken("");
+            var refreshToken = _tokenHandler.TakeRefreshToken(string.Empty, "test@test.com");
+            Assert.Null(refreshToken);
+        }
+
+		[Fact]
+        public void Should_Return_Null_For_Empty_Email_When_Trying_To_Take_Refresh_Token()
+		{
+            var accessToken = _tokenHandler.CreateAccessToken(_user);
+            var refreshToken = _tokenHandler.TakeRefreshToken(accessToken.RefreshToken.Token, string.Empty);
+
             Assert.Null(refreshToken);
         }
 
         [Fact]
-        public void Should_Return_Null_For_Invalid_Refresh_Token_When_Trying_To_Take()
+        public void Should_Return_Null_For_Invalid_Refresh_Token_When_Trying_To_Take_Refresh_oken()
         {
-            var refreshToken = _tokenHandler.TakeRefreshToken("invalid_token");
+            var refreshToken = _tokenHandler.TakeRefreshToken("invalid_token", "test@test.com");
+            Assert.Null(refreshToken);
+        }
+
+        [Fact]
+        public void Should_Return_Null_For_Invalid_Email_When_Trying_To_Take_Refresh_Token()
+        {
+            var accessToken = _tokenHandler.CreateAccessToken(_user);
+            var refreshToken = _tokenHandler.TakeRefreshToken(accessToken.RefreshToken.Token, "admin@admin.com");
             Assert.Null(refreshToken);
         }
 
@@ -104,8 +121,8 @@ namespace JWTPAPI.Tests.Security.Tokens
         public void Should_Not_Take_Refresh_Token_That_Was_Already_Taken()
         {
             var accessToken = _tokenHandler.CreateAccessToken(_user);
-            var refreshToken = _tokenHandler.TakeRefreshToken(accessToken.RefreshToken.Token);
-            var refreshTokenSecondTime = _tokenHandler.TakeRefreshToken(accessToken.RefreshToken.Token);
+            var refreshToken = _tokenHandler.TakeRefreshToken(accessToken.RefreshToken.Token, "test@test.com");
+            var refreshTokenSecondTime = _tokenHandler.TakeRefreshToken(accessToken.RefreshToken.Token, "test@test.com");
 
             Assert.NotNull(refreshToken);
             Assert.Null(refreshTokenSecondTime);
@@ -115,8 +132,8 @@ namespace JWTPAPI.Tests.Security.Tokens
         public void Should_Revoke_Refresh_Token()
         {
             var accessToken = _tokenHandler.CreateAccessToken(_user);
-            _tokenHandler.RevokeRefreshToken(accessToken.RefreshToken.Token);
-            var refreshToken = _tokenHandler.TakeRefreshToken(accessToken.RefreshToken.Token);
+            _tokenHandler.RevokeRefreshToken(accessToken.RefreshToken.Token, "test@test.com");
+            var refreshToken = _tokenHandler.TakeRefreshToken(accessToken.RefreshToken.Token, "test@test.com");
 
             Assert.Null(refreshToken);
         }

@@ -58,14 +58,14 @@ namespace JWTAPI.Controllers
 
         [Route("/api/token/revoke")]
         [HttpPost]
-        public IActionResult RevokeToken([FromBody] RevokeTokenResource revokeTokenResource)
+        public IActionResult RevokeToken([FromBody] RevokeTokenResource resource)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            _authenticationService.RevokeRefreshToken(revokeTokenResource.Token);
+            _authenticationService.RevokeRefreshToken(resource.Token, resource.Email);
             return NoContent();
         }
     }
