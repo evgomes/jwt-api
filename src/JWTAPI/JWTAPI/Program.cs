@@ -1,32 +1,86 @@
-﻿using JWTAPI.Core.Security.Hashing;
+﻿using JWTAPI.Core.Repositories;
+using JWTAPI.Core.Security.Hashing;
+using JWTAPI.Core.Security.Tokens;
+using JWTAPI.Core.Services;
+using JWTAPI.Extensions;
 using JWTAPI.Persistence;
+using JWTAPI.Security.Hashing;
+using JWTAPI.Security.Tokens;
+using JWTAPI.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using System.Reflection;
 
-namespace JWTAPI
+var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddDbContext<AppDbContext>(options =>
 {
-    public class Program
+    options.UseInMemoryDatabase("jwtapi");
+});
+
+builder.Services.AddControllers();
+
+builder.Services.AddCustomSwagger();
+
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+builder.Services.AddSingleton<IPasswordHasher, PasswordHasher>();
+builder.Services.AddSingleton<ITokenHandler, JWTAPI.Security.Tokens.TokenHandler>();
+
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
+
+builder.Services.Configure<TokenOptions>(builder.Configuration.GetSection("TokenOptions"));
+var tokenOptions = builder.Configuration.GetSection("TokenOptions").Get<TokenOptions>();
+
+var signingConfigurations = new SigningConfigurations(tokenOptions.Secret);
+builder.Services.AddSingleton(signingConfigurations);
+
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(jwtBearerOptions =>
     {
-        public static void Main(string[] args)
+        jwtBearerOptions.TokenValidationParameters = new TokenValidationParameters()
         {
-            var host = CreateHostBuilder(args).Build();
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            ValidIssuer = tokenOptions.Issuer,
+            ValidAudience = tokenOptions.Audience,
+            IssuerSigningKey = signingConfigurations.SecurityKey,
+            ClockSkew = TimeSpan.Zero
+        };
+    });
 
-            using (var scope = host.Services.CreateScope())
-            {
-                var services = scope.ServiceProvider;
-                var context = services.GetService<AppDbContext>();
-                var passwordHasher = services.GetService<IPasswordHasher>();
-                DatabaseSeed.Seed(context, passwordHasher);
-            }
+builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
-            host.Run();
-        }
+var app = builder.Build();
+app.UseDeveloperExceptionPage();
 
-        public static IHostBuilder CreateHostBuilder(string[] args)
-        {
-            return Host.CreateDefaultBuilder(args)
-                .ConfigureWebHostDefaults(webBuilder =>
-                {
-                    webBuilder.UseStartup<Startup>();
-                });
-        }
-    }
+app.UseRouting();
+
+app.UseCustomSwagger();
+
+app.UseAuthentication();
+app.UseAuthorization();
+
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapControllers();
+});
+
+using var scope = app.Services.CreateScope();
+try
+{
+    var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    var passwordHasher = scope.ServiceProvider.GetRequiredService<IPasswordHasher>();
+    await DatabaseSeed.SeedAsync(dbContext, passwordHasher);
 }
+catch (Exception ex)
+{
+    var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
+    logger.LogError(ex, "An error occured while applying migrations");
+}
+
+await app.RunAsync();
