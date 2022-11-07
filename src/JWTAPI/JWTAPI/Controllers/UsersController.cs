@@ -1,42 +1,33 @@
-using AutoMapper;
-using JWTAPI.Controllers.Resources;
-using JWTAPI.Core.Models;
-using JWTAPI.Core.Services;
-using Microsoft.AspNetCore.Mvc;
+namespace JWTAPI.Controllers;
 
-namespace JWTAPI.Controllers
+[ApiController]
+[Route("/api/users")]
+public class UsersController : ControllerBase
 {
-    [ApiController]
-    [Route("/api/[controller]")]
-    public class UsersController : Controller
+    private readonly IMapper _mapper;
+    private readonly IUserService _userService;
+
+    public UsersController(IUserService userService, IMapper mapper)
     {
-        private readonly IMapper _mapper;
-        private readonly IUserService _userService;
+        _userService = userService;
+        _mapper = mapper;
+    }
 
-        public UsersController(IUserService userService, IMapper mapper)
+    [HttpPost]
+    public async Task<IActionResult> CreateUserAsync(
+        [FromBody] UserCredentialsResource userCredentials)
+    {
+        var user = _mapper.Map<UserCredentialsResource, User>(userCredentials);
+
+        var response = await _userService.CreateUserAsync(user, ApplicationRole.Common);
+
+        if (!response.Success)
         {
-            _userService = userService;
-            _mapper = mapper;
+            return BadRequest(response.Message);
         }
 
-        [HttpPost]
-        public async Task<IActionResult> CreateUserAsync([FromBody] UserCredentialsResource userCredentials)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
+        var userResource = _mapper.Map<User, UserResource>(response.User);
 
-            var user = _mapper.Map<UserCredentialsResource, User>(userCredentials);
-            
-            var response = await _userService.CreateUserAsync(user, ApplicationRole.Common);
-            if(!response.Success)
-            {
-                return BadRequest(response.Message);
-            }
-
-            var userResource = _mapper.Map<User, UserResource>(response.User);
-            return Ok(userResource);
-        }
+        return Ok(userResource);
     }
 }

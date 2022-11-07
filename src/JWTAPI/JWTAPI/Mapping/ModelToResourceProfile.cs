@@ -1,21 +1,14 @@
-using AutoMapper;
-using JWTAPI.Controllers.Resources;
-using JWTAPI.Core.Models;
-using JWTAPI.Core.Security.Tokens;
-
-namespace JWTAPI.Mapping
+namespace JWTAPI.Mapping;
+public class ModelToResourceProfile : Profile
 {
-    public class ModelToResourceProfile : Profile
+    public ModelToResourceProfile()
     {
-        public ModelToResourceProfile()
-        {
-            CreateMap<User, UserResource>()
-                .ForMember(u => u.Roles, opt => opt.MapFrom(u => u.UserRoles.Select(ur => ur.Role.Name)));
+        CreateMap<User, UserResource>()
+            .ForMember(u => u.Roles, opt => opt.MapFrom(u => u.UserRoles.Select(ur => ur.Role.Name)));
 
-            CreateMap<AccessToken, AccessTokenResource>()
-                .ForMember(a => a.AccessToken, opt => opt.MapFrom(a => a.Token))
-                .ForMember(a => a.RefreshToken, opt => opt.MapFrom(a => a.RefreshToken.Token))
-                .ForMember(a => a.Expiration, opt => opt.MapFrom(a => a.Expiration));
-        }
+        CreateMap<AccessToken, AccessTokenResource>()
+            .ForMember(a => a.AccessToken, opt => opt.MapFrom(a => a.Token))
+            .ForMember(a => a.RefreshToken, opt => opt.MapFrom(a => a.RefreshToken.Token))
+            .ForMember(a => a.Expiration, opt => opt.MapFrom(a => a.Expiration));
     }
 }

@@ -1,5 +1,4 @@
 namespace JWTAPI.Persistence;
-
 public class UserRepository : IUserRepository
 {
     private readonly AppDbContext _context;

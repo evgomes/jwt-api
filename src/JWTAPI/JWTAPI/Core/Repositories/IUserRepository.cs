@@ -1,10 +1,6 @@
-using JWTAPI.Core.Models;
-
-namespace JWTAPI.Core.Repositories
+namespace JWTAPI.Core.Repositories;
+public interface IUserRepository
 {
-    public interface IUserRepository
-    {
-        Task AddAsync(User user, ApplicationRole[] userRoles);
-        Task<User> FindByEmailAsync(string email);
-    }
+    Task AddAsync(User user, ApplicationRole[] userRoles);
+    Task<User> FindByEmailAsync(string email);
 }

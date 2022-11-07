@@ -1,25 +1,22 @@
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+namespace JWTAPI.Controllers;
 
-namespace JWTAPI.Controllers
+[ApiController]
+[Route("api/protected")]
+public class ProtectedController : ControllerBase
 {
-    [ApiController]
-    public class ProtectedController : Controller
+    [HttpGet]
+    [Authorize]
+    [Route("for-commonusers")]
+    public IActionResult GetProtectedData()
     {
-        [HttpGet]
-        [Authorize]
-        [Route("/api/protectedforcommonusers")]
-        public IActionResult GetProtectedData()
-        {
-            return Ok("Hello world from protected controller.");
-        }
+        return Ok("Hello world from protected controller.");
+    }
 
-        [HttpGet]
-        [Authorize(Roles = "Administrator")]
-        [Route("/api/protectedforadministrators")]
-        public IActionResult GetProtectedDataForAdmin()
-        {
-            return Ok("Hello admin!");
-        }
+    [HttpGet]
+    [Authorize(Roles = "Administrator")]
+    [Route("for-administrators")]
+    public IActionResult GetProtectedDataForAdmin()
+    {
+        return Ok("Hello admin!");
     }
 }

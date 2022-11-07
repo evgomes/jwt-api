@@ -1,5 +1,4 @@
 namespace JWTAPI.Controllers.Resources;
-
 public class UserCredentialsResource
 {
     [Required]

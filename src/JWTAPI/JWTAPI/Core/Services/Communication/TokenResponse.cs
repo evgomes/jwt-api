@@ -1,14 +1,10 @@
-using JWTAPI.Core.Security.Tokens;
-
-namespace JWTAPI.Core.Services.Communication
+namespace JWTAPI.Core.Services.Communication;
+public class TokenResponse : BaseResponse
 {
-    public class TokenResponse : BaseResponse
-    {
-        public AccessToken Token { get; set; }
+    public AccessToken Token { get; set; }
 
-        public TokenResponse(bool success, string message, AccessToken token) : base(success, message)
-        {
-            Token = token;
-        }
+    public TokenResponse(bool success, string message, AccessToken token) : base(success, message)
+    {
+        Token = token;
     }
 }
