@@ -1,8 +1,6 @@
-namespace JWTAPI.Core.Models
+namespace JWTAPI.Core.Models;
+public enum ApplicationRole
 {
-    public enum ApplicationRole
-    {
-        Common = 1,
-        Administrator = 2
-    }
+    Common = 1,
+    Administrator = 2
 }

@@ -1,21 +1,16 @@
-using JWTAPI.Core.Models;
-using Microsoft.EntityFrameworkCore;
-
-namespace JWTAPI.Persistence
+namespace JWTAPI.Persistence;
+public class AppDbContext : DbContext
 {
-    public class AppDbContext : DbContext
+    public DbSet<User> Users { get; set; }
+    public DbSet<Role> Roles { get; set; }
+
+    public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
+    { }
+
+    protected override void OnModelCreating(ModelBuilder builder)
     {
-        public DbSet<User> Users { get; set; }
-        public DbSet<Role> Roles { get; set; }
+        base.OnModelCreating(builder);
 
-        public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
-        { }
-
-        protected override void OnModelCreating(ModelBuilder builder)
-        {
-            base.OnModelCreating(builder);
-
-            builder.Entity<UserRole>().HasKey(ur => new { ur.UserId, ur.RoleId });
-        }
+        builder.Entity<UserRole>().HasKey(ur => new { ur.UserId, ur.RoleId });
     }
 }

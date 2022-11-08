@@ -1,32 +1,39 @@
-﻿using JWTAPI.Core.Security.Hashing;
-using JWTAPI.Persistence;
+﻿var builder = WebApplication.CreateBuilder(args);
 
-namespace JWTAPI
+builder.Services.AddCustomSwagger();
+
+builder.Services.AddApplicationServices();
+
+builder.Services.AddIdentityServices(builder.Configuration);
+
+var app = builder.Build();
+
+app.UseDeveloperExceptionPage();
+
+app.UseRouting();
+
+app.UseCustomSwagger();
+
+app.UseAuthentication();
+
+app.UseAuthorization();
+
+app.UseEndpoints(endpoints =>
 {
-    public class Program
-    {
-        public static void Main(string[] args)
-        {
-            var host = CreateHostBuilder(args).Build();
+    endpoints.MapControllers();
+});
 
-            using (var scope = host.Services.CreateScope())
-            {
-                var services = scope.ServiceProvider;
-                var context = services.GetService<AppDbContext>();
-                var passwordHasher = services.GetService<IPasswordHasher>();
-                DatabaseSeed.Seed(context, passwordHasher);
-            }
-
-            host.Run();
-        }
-
-        public static IHostBuilder CreateHostBuilder(string[] args)
-        {
-            return Host.CreateDefaultBuilder(args)
-                .ConfigureWebHostDefaults(webBuilder =>
-                {
-                    webBuilder.UseStartup<Startup>();
-                });
-        }
-    }
+using var scope = app.Services.CreateScope();
+try
+{
+    var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    var passwordHasher = scope.ServiceProvider.GetRequiredService<IPasswordHasher>();
+    await DatabaseSeed.SeedAsync(dbContext, passwordHasher);
 }
+catch (Exception ex)
+{
+    var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
+    logger.LogError(ex, "An error occured while applying migrations");
+}
+
+await app.RunAsync();
