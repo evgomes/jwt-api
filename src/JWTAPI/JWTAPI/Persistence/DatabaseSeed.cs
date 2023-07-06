@@ -30,7 +30,7 @@ public class DatabaseSeed
 
         users[0].UserRoles.Add(new UserRole
         {
-            RoleId = context.Roles.SingleOrDefault(r => r.Name == ApplicationRole.Administrator.ToString()).Id,
+            RoleId = context.Roles.Single(r => r.Name == ApplicationRole.Administrator.ToString()).Id,
             Role = new Role
             {
                 Name = ApplicationRole.Administrator.ToString()
@@ -39,7 +39,7 @@ public class DatabaseSeed
 
         users[1].UserRoles.Add(new UserRole
         {
-            RoleId = context.Roles.SingleOrDefault(r => r.Name == ApplicationRole.Common.ToString()).Id,
+            RoleId = context.Roles.Single(r => r.Name == ApplicationRole.Common.ToString()).Id,
             Role = new Role
             {
                 Name = ApplicationRole.Common.ToString()

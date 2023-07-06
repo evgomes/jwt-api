@@ -4,7 +4,7 @@ public class ModelToResourceProfile : Profile
     public ModelToResourceProfile()
     {
         CreateMap<User, UserResource>()
-            .ForMember(u => u.Roles, opt => opt.MapFrom(u => u.UserRoles.Select(ur => ur.Role.Name)));
+            .ForMember(u => u.Roles, opt => opt.MapFrom(u => u.UserRoles.Select(ur => ur.Role!.Name)));
 
         CreateMap<AccessToken, AccessTokenResource>()
             .ForMember(a => a.AccessToken, opt => opt.MapFrom(a => a.Token))

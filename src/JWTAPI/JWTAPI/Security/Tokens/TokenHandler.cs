@@ -32,7 +32,7 @@ public class TokenHandler : ITokenHandler
         return accessToken;
     }
 
-    public RefreshToken TakeRefreshToken(string token, string userEmail)
+    public RefreshToken? TakeRefreshToken(string token, string userEmail)
     {
         if (string.IsNullOrWhiteSpace(token) || string.IsNullOrWhiteSpace(userEmail))
         {
@@ -97,7 +97,7 @@ public class TokenHandler : ITokenHandler
 
         foreach (var userRole in user.UserRoles)
         {
-            claims.Add(new Claim(ClaimTypes.Role, userRole.Role.Name));
+            claims.Add(new Claim(ClaimTypes.Role, userRole.Role!.Name));
         }
 
         return claims;

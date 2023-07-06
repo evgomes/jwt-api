@@ -10,7 +10,7 @@ public static class MiddlewareExtensions
 			{
 				Title = "JWT API",
 				Version = "v4",
-				Description = "Example API that shows how to implement JSON Web Token authentication and authorization with ASP.NET 6, built from scratch.",
+				Description = "Example API that shows how to implement JSON Web Token authentication and authorization with ASP.NET Core 7, built from scratch.",
 				Contact = new OpenApiContact
 				{
 					Name = "Evandro Gayer Gomes",
