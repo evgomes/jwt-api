@@ -97,7 +97,7 @@ public class TokenHandler : ITokenHandler
 
         foreach (var userRole in user.UserRoles)
         {
-            claims.Add(new Claim(ClaimTypes.Role, userRole.Role.Name));
+            claims.Add(new Claim(ClaimTypes.Role, userRole.Role!.Name));
         }
 
         return claims;
