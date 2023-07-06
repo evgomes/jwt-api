@@ -7,7 +7,7 @@ public static class IdentityServiceExtenstions
     {
         services.Configure<TokenOptions>(configuration.GetSection("TokenOptions"));
 
-        var tokenOptions = configuration.GetSection("TokenOptions").Get<TokenOptions>();
+        var tokenOptions = configuration.GetSection("TokenOptions").Get<TokenOptions>() ?? throw new ArgumentNullException(nameof(TokenOptions));
 
         var signingConfigurations = new SigningConfigurations(tokenOptions.Secret);
 

@@ -32,7 +32,7 @@ public class UserService : IUserService
         return new CreateUserResponse(true, null, user);
     }
 
-    public async Task<User> FindByEmailAsync(string email)
+    public async Task<User?> FindByEmailAsync(string email)
     {
         return await _userRepository.FindByEmailAsync(email);
     }

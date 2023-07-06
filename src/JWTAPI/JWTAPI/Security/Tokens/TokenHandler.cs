@@ -32,7 +32,7 @@ public class TokenHandler : ITokenHandler
         return accessToken;
     }
 
-    public RefreshToken TakeRefreshToken(string token, string userEmail)
+    public RefreshToken? TakeRefreshToken(string token, string userEmail)
     {
         if (string.IsNullOrWhiteSpace(token) || string.IsNullOrWhiteSpace(userEmail))
         {

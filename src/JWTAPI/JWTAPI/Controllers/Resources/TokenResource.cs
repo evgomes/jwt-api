@@ -1,7 +1,8 @@
 namespace JWTAPI.Controllers.Resources;
+
 public class AccessTokenResource
 {
-    public string AccessToken { get; set; }
-    public string RefreshToken { get; set; }
-    public long Expiration { get; set; }
+    public string AccessToken { get; init; } = null!;
+    public string RefreshToken { get; init; } = null!;
+	public long Expiration { get; set; }
 }

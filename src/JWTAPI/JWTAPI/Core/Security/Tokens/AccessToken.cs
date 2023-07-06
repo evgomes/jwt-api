@@ -6,6 +6,6 @@ public class AccessToken : JsonWebToken
     public AccessToken(string token, long expiration, RefreshToken refreshToken) : base(token, expiration)
     {
         RefreshToken = refreshToken 
-            ?? throw new ArgumentException("Specify a valid refresh token.");
+            ?? throw new ArgumentNullException("Specify a valid refresh token.");
     }
 }

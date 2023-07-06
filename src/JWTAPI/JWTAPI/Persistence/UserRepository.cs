@@ -21,7 +21,7 @@ public class UserRepository : IUserRepository
         _context.Users.Add(user);
     }
 
-    public async Task<User> FindByEmailAsync(string email)
+    public async Task<User?> FindByEmailAsync(string email)
     {
         return await _context.Users
             .Include(_ => _.UserRoles)

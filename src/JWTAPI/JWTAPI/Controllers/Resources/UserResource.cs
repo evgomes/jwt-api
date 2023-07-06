@@ -1,7 +1,8 @@
 namespace JWTAPI.Controllers.Resources;
-public class UserResource
+
+public record UserResource
 {
     public int Id { get; set; }
-    public string Email { get; set; }
-    public IEnumerable<string> Roles { get; set; }
+    public string Email { get; set; } = null!;
+    public IEnumerable<string> Roles { get; set; } = new List<string>();
 }

@@ -1,11 +1,12 @@
 namespace JWTAPI.Controllers.Resources;
-public class RefreshTokenResource
+
+public record RefreshTokenResource
 {
     [Required]
-    public string Token { get; set; }
+    public string? Token { get; init; }
 
     [Required]
     [EmailAddress]
     [StringLength(255)]
-    public string UserEmail { get; set; }
+    public string? UserEmail { get; init; }
 }
