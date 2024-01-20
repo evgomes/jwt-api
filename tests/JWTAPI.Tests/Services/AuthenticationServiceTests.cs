@@ -43,7 +43,7 @@ public class AuthenticationServiceTests
                     });
 
         _passwordHasher = new Mock<IPasswordHasher>();
-        _passwordHasher.Setup(ph => ph.PasswordMatches(It.IsAny<string>(), It.IsAny<string>()))
+        _passwordHasher.Setup(ph => ph.ValidatePassword(It.IsAny<string>(), It.IsAny<string>()))
                        .Returns<string, string>((password, hash) => password == hash);
 
         _tokenHandler = new Mock<ITokenHandler>();

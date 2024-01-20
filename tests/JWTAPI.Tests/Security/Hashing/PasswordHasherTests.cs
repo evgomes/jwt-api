@@ -31,7 +31,7 @@ public class PasswordHasherTests
         var firstPassword = "123456";
         var firstPasswordAsHash = _passwordHasher.HashPassword(firstPassword);
 
-        Assert.True(_passwordHasher.PasswordMatches(firstPassword, firstPasswordAsHash));
+        Assert.True(_passwordHasher.ValidatePassword(firstPassword, firstPasswordAsHash));
     }
 
     [Fact]
@@ -43,7 +43,7 @@ public class PasswordHasherTests
         var firstPasswordAsHash = _passwordHasher.HashPassword(firstPassword);
         var secondPasswordAsHash = _passwordHasher.HashPassword(secondPassword);
 
-        Assert.False(_passwordHasher.PasswordMatches(firstPassword, secondPasswordAsHash));
-        Assert.False(_passwordHasher.PasswordMatches(secondPassword, firstPasswordAsHash));
+        Assert.False(_passwordHasher.ValidatePassword(firstPassword, secondPasswordAsHash));
+        Assert.False(_passwordHasher.ValidatePassword(secondPassword, firstPasswordAsHash));
     }
 }

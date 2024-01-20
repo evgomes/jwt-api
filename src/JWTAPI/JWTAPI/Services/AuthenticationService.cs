@@ -20,7 +20,7 @@ public class AuthenticationService : IAuthenticationService
     {
         var user = await _userService.FindByEmailAsync(email);
 
-        if (user == null || !_passwordHasher.PasswordMatches(password, user.Password))
+        if (user == null || !_passwordHasher.ValidatePassword(password, user.Password))
         {
             return new TokenResponse(false, "Invalid credentials.", null);
         }
